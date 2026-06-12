@@ -4,7 +4,15 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { ROLE_LABELS, type Profile } from "@/lib/types";
 import { CITIES } from "@/lib/constants";
+import { BOOKING_STATUS_LABELS, type VisitBooking } from "@/lib/facilities";
 import { updateProfile, signOut } from "./actions";
+
+const BOOKING_STATUS_STYLES: Record<string, string> = {
+  pending: "bg-amber-100 text-amber-800",
+  confirmed: "bg-brand-100 text-brand-800",
+  declined: "bg-red-100 text-red-700",
+  completed: "bg-stone-200 text-stone-700",
+};
 
 export const metadata: Metadata = { title: "Tài khoản của tôi" };
 
@@ -26,6 +34,14 @@ export default async function AccountPage({
     .eq("id", user.id)
     .single()) as { data: Profile | null };
   if (!profile) redirect("/dang-nhap");
+
+  const { data: bookingRows } = await supabase
+    .from("visit_bookings")
+    .select("*, facilities(name, slug)")
+    .eq("requester_id", user.id)
+    .order("created_at", { ascending: false })
+    .limit(20);
+  const bookings = (bookingRows ?? []) as VisitBooking[];
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-8">
@@ -55,6 +71,48 @@ export default async function AccountPage({
             : "Vào trang doanh nghiệp →"}
         </Link>
       )}
+
+      <section className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
+        <h2 className="text-xl font-bold text-stone-900">
+          Hoạt động của tôi
+        </h2>
+        {bookings.length === 0 ? (
+          <p className="mt-3 text-stone-600">
+            Bạn chưa có yêu cầu tham quan nào.{" "}
+            <Link href="/duong-lao" className="font-bold text-brand-700 underline">
+              Tìm nhà dưỡng lão →
+            </Link>
+          </p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {bookings.map((b) => (
+              <li
+                key={b.id}
+                className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-stone-50 px-4 py-3"
+              >
+                <div>
+                  <Link
+                    href={`/duong-lao/${b.facilities?.slug ?? ""}`}
+                    className="font-bold text-brand-700 hover:underline"
+                  >
+                    {b.facilities?.name ?? "Cơ sở"}
+                  </Link>
+                  <p className="text-sm text-stone-600">
+                    Tham quan{" "}
+                    {new Date(b.preferred_date).toLocaleDateString("vi-VN")} ·{" "}
+                    {b.preferred_time === "morning" ? "buổi sáng" : "buổi chiều"}
+                  </p>
+                </div>
+                <span
+                  className={`rounded-full px-3 py-1 text-sm font-bold ${BOOKING_STATUS_STYLES[b.status]}`}
+                >
+                  {BOOKING_STATUS_LABELS[b.status]}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       <div className="mt-6 rounded-2xl border border-stone-200 bg-white p-6">
         <h2 className="text-xl font-bold text-stone-900">
