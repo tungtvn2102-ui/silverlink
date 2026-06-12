@@ -7,6 +7,10 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/admin", "/doanh-nghiep", "/tai-khoan", "/auth"],
     },
-    sitemap: "https://silverlink.vercel.app/sitemap.xml",
+    sitemap: `${
+      process.env.VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000"
+    }/sitemap.xml`,
   };
 }
