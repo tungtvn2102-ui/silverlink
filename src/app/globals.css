@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #f0f7f4;
+  --color-brand-100: #dcefe7;
+  --color-brand-200: #b9dfd0;
+  --color-brand-300: #8cc8b1;
+  --color-brand-400: #57a98c;
+  --color-brand-500: #358a6e;
+  --color-brand-600: #1d6f5d;
+  --color-brand-700: #185a4c;
+  --color-brand-800: #16483e;
+  --color-brand-900: #133b34;
+  --font-sans: var(--font-be-vietnam), system-ui, sans-serif;
+}
+
+/* Elderly-first: 18px base, 22px in large-text mode (scales every rem unit) */
+html {
+  font-size: 112.5%;
+}
+html.lt {
+  font-size: 137.5%;
+}
+
+body {
+  background: #faf9f7;
+  color: #292524;
+  font-family: var(--font-sans);
+}
+
+@layer base {
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-brand-500);
+    outline-offset: 2px;
+  }
+}

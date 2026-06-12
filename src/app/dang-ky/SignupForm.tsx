@@ -1,0 +1,184 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+
+const ROLES = [
+  {
+    value: "senior",
+    title: "Tôi là người cao tuổi",
+    desc: "Tìm nơi chăm sóc, việc làm phù hợp và bạn bè đồng trang lứa.",
+  },
+  {
+    value: "family",
+    title: "Tôi tìm cho người thân",
+    desc: "Tìm nhà dưỡng lão uy tín và dịch vụ tin cậy cho cha mẹ, ông bà.",
+  },
+  {
+    value: "business",
+    title: "Tôi là doanh nghiệp",
+    desc: "Cơ sở dưỡng lão hoặc doanh nghiệp tuyển dụng lao động cao tuổi.",
+  },
+] as const;
+
+export default function SignupForm() {
+  const router = useRouter();
+  const [role, setRole] = useState<string>("family");
+  const [error, setError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    const form = new FormData(e.currentTarget);
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signUp({
+      email: String(form.get("email")),
+      password: String(form.get("password")),
+      options: {
+        data: {
+          full_name: String(form.get("full_name")),
+          role,
+        },
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+      },
+    });
+    setLoading(false);
+    if (error) {
+      setError(
+        error.message.includes("already registered")
+          ? "Email này đã được đăng ký. Vui lòng đăng nhập."
+          : error.message.includes("Password")
+            ? "Mật khẩu cần ít nhất 6 ký tự."
+            : "Đăng ký thất bại. Vui lòng thử lại."
+      );
+      return;
+    }
+    if (data.session) {
+      router.push(role === "business" ? "/doanh-nghiep" : "/");
+      router.refresh();
+    } else {
+      setDone(true);
+    }
+  }
+
+  if (done) {
+    return (
+      <div className="mt-6 rounded-2xl bg-brand-50 p-6 text-center">
+        <p className="text-2xl">📬</p>
+        <h2 className="mt-2 text-xl font-bold text-brand-800">
+          Kiểm tra email của bạn
+        </h2>
+        <p className="mt-2 text-stone-700">
+          Chúng tôi đã gửi một liên kết xác nhận. Vui lòng mở email và bấm vào
+          liên kết để hoàn tất đăng ký.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={onSubmit} className="mt-6 space-y-4">
+      <fieldset>
+        <legend className="mb-2 font-semibold">Bạn là ai?</legend>
+        <div className="space-y-2">
+          {ROLES.map((r) => (
+            <label
+              key={r.value}
+              className={`block cursor-pointer rounded-xl border-2 p-4 transition ${
+                role === r.value
+                  ? "border-brand-600 bg-brand-50"
+                  : "border-stone-200 bg-white hover:border-stone-300"
+              }`}
+            >
+              <input
+                type="radio"
+                name="role"
+                value={r.value}
+                checked={role === r.value}
+                onChange={() => setRole(r.value)}
+                className="sr-only"
+              />
+              <span className="font-bold text-stone-900">{r.title}</span>
+              <span className="mt-1 block text-sm text-stone-600">
+                {r.desc}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div>
+        <label htmlFor="full_name" className="mb-1 block font-semibold">
+          Họ và tên
+        </label>
+        <input
+          id="full_name"
+          name="full_name"
+          required
+          autoComplete="name"
+          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 focus:border-brand-500"
+        />
+      </div>
+      <div>
+        <label htmlFor="email" className="mb-1 block font-semibold">
+          Email
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          autoComplete="email"
+          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 focus:border-brand-500"
+        />
+      </div>
+      <div>
+        <label htmlFor="password" className="mb-1 block font-semibold">
+          Mật khẩu <span className="font-normal text-stone-500">(ít nhất 6 ký tự)</span>
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          minLength={6}
+          autoComplete="new-password"
+          className="w-full rounded-xl border border-stone-300 bg-white px-4 py-3 focus:border-brand-500"
+        />
+      </div>
+      {error && (
+        <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-red-700">
+          {error}
+        </p>
+      )}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full rounded-xl bg-brand-600 px-4 py-3.5 text-lg font-bold text-white hover:bg-brand-700 disabled:opacity-60"
+      >
+        {loading ? "Đang tạo tài khoản…" : "Tạo tài khoản"}
+      </button>
+      <p className="text-center text-sm text-stone-500">
+        Bằng việc đăng ký, bạn đồng ý với{" "}
+        <Link href="/dieu-khoan" className="underline">
+          Điều khoản sử dụng
+        </Link>{" "}
+        và{" "}
+        <Link href="/bao-mat" className="underline">
+          Chính sách bảo mật
+        </Link>
+        .
+      </p>
+      <p className="text-center text-stone-600">
+        Đã có tài khoản?{" "}
+        <Link href="/dang-nhap" className="font-bold text-brand-700 underline">
+          Đăng nhập
+        </Link>
+      </p>
+    </form>
+  );
+}
