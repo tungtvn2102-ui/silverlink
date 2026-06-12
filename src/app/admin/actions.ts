@@ -46,3 +46,11 @@ export async function setReviewStatus(reviewId: string, status: string) {
   await supabase.from("reviews").update({ status }).eq("id", reviewId);
   revalidatePath("/admin");
 }
+
+export async function setPostStatus(postId: string, status: string) {
+  if (!["published", "removed"].includes(status)) return;
+  const supabase = await requireAdmin();
+  if (!supabase) return;
+  await supabase.from("posts").update({ status }).eq("id", postId);
+  revalidatePath("/admin");
+}

@@ -3,14 +3,21 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import type { Organization } from "@/lib/types";
 import type { Facility, Review } from "@/lib/facilities";
-import { setOrgStatus, setFacilityStatus, setReviewStatus } from "./actions";
+import type { Post } from "@/lib/community";
+import { timeAgo } from "@/lib/community";
+import {
+  setOrgStatus,
+  setFacilityStatus,
+  setReviewStatus,
+  setPostStatus,
+} from "./actions";
 
 export const metadata: Metadata = { title: "Quản trị" };
 
 export default async function AdminPage() {
   const supabase = await createClient();
 
-  const [orgsRes, facilitiesRes, flaggedRes, statsOrgs, statsUsers] =
+  const [orgsRes, facilitiesRes, flaggedRes, flaggedPostsRes, statsOrgs, statsUsers] =
     await Promise.all([
       supabase
         .from("organizations")
@@ -28,6 +35,11 @@ export default async function AdminPage() {
         .eq("status", "flagged")
         .order("created_at"),
       supabase
+        .from("posts")
+        .select("*, profiles(full_name, city), groups(name)")
+        .eq("status", "flagged")
+        .order("created_at"),
+      supabase
         .from("organizations")
         .select("*", { count: "exact", head: true }),
       supabase.from("profiles").select("*", { count: "exact", head: true }),
@@ -40,6 +52,7 @@ export default async function AdminPage() {
   const flagged = (flaggedRes.data ?? []) as (Review & {
     facilities: { name: string; slug: string } | null;
   })[];
+  const flaggedPosts = (flaggedPostsRes.data ?? []) as Post[];
 
   // Signed URLs so admins can open private license docs
   const licenseUrls = new Map<string, string>();
@@ -221,6 +234,45 @@ export default async function AdminPage() {
                     </button>
                   </form>
                   <form action={setReviewStatus.bind(null, r.id, "removed")}>
+                    <button className="rounded-xl bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700">
+                      Gỡ bỏ
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      {/* Flagged posts */}
+      <section className="mt-8">
+        <h2 className="text-xl font-bold text-stone-900">
+          Bài viết bị báo cáo ({flaggedPosts.length})
+        </h2>
+        {flaggedPosts.length === 0 ? (
+          <p className="mt-3 text-stone-500">Không có bài viết chờ xử lý.</p>
+        ) : (
+          <ul className="mt-3 space-y-3">
+            {flaggedPosts.map((p) => (
+              <li
+                key={p.id}
+                className="rounded-2xl border border-stone-200 bg-white p-5"
+              >
+                <p className="text-sm text-stone-500">
+                  {p.profiles?.full_name} · {timeAgo(p.created_at)}
+                  {p.groups?.name && ` · trong nhóm ${p.groups.name}`}
+                </p>
+                <p className="mt-2 whitespace-pre-line text-stone-700">
+                  {p.body}
+                </p>
+                <div className="mt-3 flex gap-2">
+                  <form action={setPostStatus.bind(null, p.id, "published")}>
+                    <button className="rounded-xl border-2 border-brand-600 px-4 py-2 font-bold text-brand-700 hover:bg-brand-50">
+                      Khôi phục
+                    </button>
+                  </form>
+                  <form action={setPostStatus.bind(null, p.id, "removed")}>
                     <button className="rounded-xl bg-red-600 px-4 py-2 font-bold text-white hover:bg-red-700">
                       Gỡ bỏ
                     </button>
