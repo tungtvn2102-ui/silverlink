@@ -36,7 +36,7 @@ export default async function AdminPage() {
         .order("created_at"),
       supabase
         .from("posts")
-        .select("*, profiles(full_name, city), groups(name)")
+        .select("*, profiles!posts_author_id_fkey(full_name, city), groups(name)")
         .eq("status", "flagged")
         .order("created_at"),
       supabase

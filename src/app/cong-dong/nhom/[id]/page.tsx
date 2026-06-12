@@ -45,7 +45,7 @@ export default async function GroupPage({
     supabase
       .from("posts")
       .select(
-        "*, profiles(full_name, city), comments(*, profiles(full_name)), reactions(profile_id)"
+        "*, profiles!posts_author_id_fkey(full_name, city), comments(*, profiles(full_name)), reactions(profile_id)"
       )
       .eq("group_id", group.id)
       .eq("status", "published")

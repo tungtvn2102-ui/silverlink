@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { createBooking } from "./actions";
 
 export default function BookingForm({
@@ -12,10 +12,10 @@ export default function BookingForm({
   slug: string;
   defaultName: string;
 }) {
+  const [minDate] = useState(() =>
+    new Date(Date.now() + 24 * 3600 * 1000).toISOString().slice(0, 10)
+  );
   const [pending, startTransition] = useTransition();
-  const minDate = new Date(Date.now() + 24 * 3600 * 1000)
-    .toISOString()
-    .slice(0, 10);
 
   return (
     <form

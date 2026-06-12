@@ -22,7 +22,7 @@ export default async function CommunityPage() {
     supabase
       .from("posts")
       .select(
-        "*, profiles(full_name, city), groups(name), comments(*, profiles(full_name)), reactions(profile_id)"
+        "*, profiles!posts_author_id_fkey(full_name, city), groups(name), comments(*, profiles(full_name)), reactions(profile_id)"
       )
       .eq("status", "published")
       .order("created_at", { ascending: false })
