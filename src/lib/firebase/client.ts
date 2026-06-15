@@ -5,6 +5,7 @@ import {
   type Analytics,
 } from "firebase/analytics";
 import { getAuth, type Auth } from "firebase/auth";
+import { getFirestore, type Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey:
@@ -35,6 +36,10 @@ export function getFirebaseApp(): FirebaseApp {
 
 export function getFirebaseAuth(): Auth {
   return getAuth(getFirebaseApp());
+}
+
+export function getFirebaseDb(): Firestore {
+  return getFirestore(getFirebaseApp());
 }
 
 export function getFirebaseAnalytics(): Promise<Analytics | null> {

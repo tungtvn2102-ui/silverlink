@@ -6,7 +6,7 @@ import Logo from "@/components/Logo";
 const NAV = [
   { href: "/gioi-thieu", label: "Giới thiệu" },
   { href: "/duong-lao", label: "Dưỡng lão" },
-  { href: "/tin-tuc", label: "Cẩm nang" },
+  { href: "/tin-tuc", label: "Bài viết" },
   { href: "/viec-lam", label: "Việc làm" },
   { href: "/cong-dong", label: "Cộng đồng" },
 ];
