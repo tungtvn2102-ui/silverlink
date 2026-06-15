@@ -6,6 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import Header from "@/components/layout/Header";
 import BottomNav from "@/components/layout/BottomNav";
 import Footer from "@/components/layout/Footer";
+import FirebaseAnalytics from "@/components/FirebaseAnalytics";
 import type { Profile } from "@/lib/types";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -62,6 +63,7 @@ export default async function RootLayout({
         <main className="flex-1 pb-24 md:pb-0">{children}</main>
         <Footer />
         <BottomNav loggedIn={!!profile} />
+        <FirebaseAnalytics />
       </body>
     </html>
   );
