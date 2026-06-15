@@ -49,12 +49,15 @@ export default function SignupForm() {
     });
     setLoading(false);
     if (error) {
+      const message = error.message.toLowerCase();
       setError(
-        error.message.includes("already registered")
+        message.includes("already registered") ||
+          message.includes("already exists") ||
+          message.includes("user_already_exists")
           ? "Email này đã được đăng ký. Vui lòng đăng nhập."
-          : error.message.includes("Password")
+          : message.includes("password")
             ? "Mật khẩu cần ít nhất 6 ký tự."
-            : "Đăng ký thất bại. Vui lòng thử lại."
+            : `Đăng ký thất bại: ${error.message}`
       );
       return;
     }
