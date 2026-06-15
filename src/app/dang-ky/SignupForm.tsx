@@ -23,6 +23,9 @@ const ROLES = [
   },
 ] as const;
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://silverlink-six.vercel.app";
+
 export default function SignupForm() {
   const router = useRouter();
   const [role, setRole] = useState<string>("family");
@@ -44,7 +47,7 @@ export default function SignupForm() {
           full_name: String(form.get("full_name")),
           role,
         },
-        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        emailRedirectTo: `${SITE_URL}/auth/confirm`,
       },
     });
     setLoading(false);
