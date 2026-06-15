@@ -55,8 +55,9 @@ export default async function RootLayout({
     <html
       lang="vi"
       className={`${beVietnam.variable} h-full antialiased ${largeText ? "lt" : ""}`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Header profile={profile} largeText={largeText} />
         <main className="flex-1 pb-24 md:pb-0">{children}</main>
         <Footer />

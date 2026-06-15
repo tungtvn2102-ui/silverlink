@@ -64,6 +64,12 @@ export default function SignupForm() {
       );
       return;
     }
+    if (data.user?.identities?.length === 0) {
+      setError(
+        "Email này có thể đã được đăng ký. Vui lòng đăng nhập hoặc kiểm tra hộp thư/spam nếu bạn vừa đăng ký."
+      );
+      return;
+    }
     if (data.session) {
       router.push(role === "business" ? "/doanh-nghiep" : "/");
       router.refresh();
