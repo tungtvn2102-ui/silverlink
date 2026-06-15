@@ -4,6 +4,7 @@ import {
   isSupported,
   type Analytics,
 } from "firebase/analytics";
+import { getAuth, type Auth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey:
@@ -30,6 +31,10 @@ let analyticsPromise: Promise<Analytics | null> | null = null;
 
 export function getFirebaseApp(): FirebaseApp {
   return getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+}
+
+export function getFirebaseAuth(): Auth {
+  return getAuth(getFirebaseApp());
 }
 
 export function getFirebaseAnalytics(): Promise<Analytics | null> {

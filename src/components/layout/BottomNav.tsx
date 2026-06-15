@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { onAuthStateChanged } from "firebase/auth";
+import { getFirebaseAuth } from "@/lib/firebase/client";
 
 const TABS = [
   {
@@ -50,8 +53,15 @@ const TABS = [
   },
 ];
 
-export default function BottomNav({ loggedIn }: { loggedIn: boolean }) {
+export default function BottomNav() {
   const pathname = usePathname();
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    return onAuthStateChanged(getFirebaseAuth(), (user) => {
+      setLoggedIn(!!user);
+    });
+  }, []);
 
   return (
     <nav
@@ -63,6 +73,7 @@ export default function BottomNav({ loggedIn }: { loggedIn: boolean }) {
           const href =
             tab.href === "/tai-khoan" && !loggedIn ? "/dang-nhap" : tab.href;
           const active = pathname.startsWith(tab.href);
+
           return (
             <Link
               key={tab.href}

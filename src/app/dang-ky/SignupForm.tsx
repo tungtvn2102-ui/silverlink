@@ -2,8 +2,18 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  signOut,
+  updateProfile,
+} from "firebase/auth";
+import { getFirebaseAuth } from "@/lib/firebase/client";
+import {
+  getAuthErrorMessage,
+  saveLocalFirebaseProfile,
+  type FirebaseRole,
+} from "@/lib/firebase/auth";
 
 const ROLES = [
   {
@@ -27,8 +37,7 @@ const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://silverlink-six.vercel.app";
 
 export default function SignupForm() {
-  const router = useRouter();
-  const [role, setRole] = useState<string>("family");
+  const [role, setRole] = useState<FirebaseRole>("family");
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -37,44 +46,33 @@ export default function SignupForm() {
     e.preventDefault();
     setError(null);
     setLoading(true);
+
     const form = new FormData(e.currentTarget);
-    const supabase = createClient();
-    const { data, error } = await supabase.auth.signUp({
-      email: String(form.get("email")),
-      password: String(form.get("password")),
-      options: {
-        data: {
-          full_name: String(form.get("full_name")),
-          role,
-        },
-        emailRedirectTo: `${SITE_URL}/auth/confirm`,
-      },
-    });
-    setLoading(false);
-    if (error) {
-      const message = error.message.toLowerCase();
-      setError(
-        message.includes("already registered") ||
-          message.includes("already exists") ||
-          message.includes("user_already_exists")
-          ? "Email này đã được đăng ký. Vui lòng đăng nhập."
-          : message.includes("password")
-            ? "Mật khẩu cần ít nhất 6 ký tự."
-            : `Đăng ký thất bại: ${error.message}`
+    const fullName = String(form.get("full_name") ?? "").trim();
+    const auth = getFirebaseAuth();
+
+    try {
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        String(form.get("email")),
+        String(form.get("password"))
       );
-      return;
-    }
-    if (data.user?.identities?.length === 0) {
-      setError(
-        "Email này có thể đã được đăng ký. Vui lòng đăng nhập hoặc kiểm tra hộp thư/spam nếu bạn vừa đăng ký."
-      );
-      return;
-    }
-    if (data.session) {
-      router.push(role === "business" ? "/doanh-nghiep" : "/");
-      router.refresh();
-    } else {
+
+      await updateProfile(credential.user, { displayName: fullName });
+      saveLocalFirebaseProfile({
+        uid: credential.user.uid,
+        fullName,
+        role,
+      });
+      await sendEmailVerification(credential.user, {
+        url: `${SITE_URL}/dang-nhap`,
+      });
+      await signOut(auth);
       setDone(true);
+    } catch (err) {
+      setError(getAuthErrorMessage(err));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -86,8 +84,8 @@ export default function SignupForm() {
           Kiểm tra email của bạn
         </h2>
         <p className="mt-2 text-stone-700">
-          Chúng tôi đã gửi một liên kết xác nhận. Vui lòng mở email và bấm vào
-          liên kết để hoàn tất đăng ký.
+          Firebase đã gửi liên kết xác nhận. Vui lòng mở email và bấm vào liên
+          kết trước khi đăng nhập.
         </p>
       </div>
     );
@@ -172,7 +170,7 @@ export default function SignupForm() {
         disabled={loading}
         className="w-full rounded-xl bg-brand-600 px-4 py-3.5 text-lg font-bold text-white hover:bg-brand-700 disabled:opacity-60"
       >
-        {loading ? "Đang tạo tài khoản…" : "Tạo tài khoản"}
+        {loading ? "Đang tạo tài khoản..." : "Tạo tài khoản"}
       </button>
       <p className="text-center text-sm text-stone-500">
         Bằng việc đăng ký, bạn đồng ý với{" "}
