@@ -20,7 +20,12 @@ export const metadata: Metadata = {
     template: "%s | SilverLink",
   },
   description:
-    "Nền tảng 3-trong-1 cho người cao tuổi Việt Nam: nhà dưỡng lão được kiểm chứng, việc làm cao tuổi và cộng đồng thân thiện.",
+    "Nền tảng 3-trong-1 cho người cao tuổi Việt Nam: nhà dưỡng lão được kiểm chứng, việc làm cao tuổi, cẩm nang chăm sóc và cộng đồng thân thiện.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/favicon.ico",
+    apple: "/icon-192.png",
+  },
 };
 
 export default async function RootLayout({

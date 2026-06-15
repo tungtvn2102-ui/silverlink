@@ -1,9 +1,12 @@
 import Link from "next/link";
 import type { Profile } from "@/lib/types";
 import LargeTextToggle from "@/components/LargeTextToggle";
+import Logo from "@/components/Logo";
 
 const NAV = [
-  { href: "/duong-lao", label: "Nhà dưỡng lão" },
+  { href: "/gioi-thieu", label: "Giới thiệu" },
+  { href: "/duong-lao", label: "Dưỡng lão" },
+  { href: "/tin-tuc", label: "Cẩm nang" },
   { href: "/viec-lam", label: "Việc làm" },
   { href: "/cong-dong", label: "Cộng đồng" },
 ];
@@ -16,15 +19,10 @@ export default function Header({
   largeText: boolean;
 }) {
   return (
-    <header className="sticky top-0 z-40 bg-brand-700 text-white shadow-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
+    <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 text-stone-900 shadow-sm backdrop-blur">
+      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between gap-4 px-4">
         <Link href="/" className="flex items-center gap-2 shrink-0">
-          <span className="grid h-9 w-9 place-items-center rounded-full bg-white/15 text-lg font-extrabold">
-            S
-          </span>
-          <span className="text-xl font-extrabold tracking-tight">
-            Silver<span className="text-brand-200">Link</span>
-          </span>
+          <Logo compact />
         </Link>
 
         <nav className="hidden md:flex items-center gap-1">
@@ -32,7 +30,7 @@ export default function Header({
             <Link
               key={item.href}
               href={item.href}
-              className="rounded-lg px-4 py-2 font-semibold hover:bg-white/10"
+              className="rounded-lg px-3 py-2 text-sm font-bold text-stone-700 hover:bg-brand-50 hover:text-brand-800 lg:px-4"
             >
               {item.label}
             </Link>
@@ -50,9 +48,9 @@ export default function Header({
                     ? "/doanh-nghiep"
                     : "/tai-khoan"
               }
-              className="flex items-center gap-2 rounded-full bg-white/10 py-1.5 pl-2 pr-4 font-semibold hover:bg-white/20"
+              className="flex items-center gap-2 rounded-full bg-brand-50 py-1.5 pl-2 pr-4 font-semibold text-brand-800 hover:bg-brand-100"
             >
-              <span className="grid h-7 w-7 place-items-center rounded-full bg-brand-200 text-sm font-bold text-brand-800">
+              <span className="grid h-7 w-7 place-items-center rounded-full bg-brand-700 text-sm font-bold text-white">
                 {(profile.full_name || "?").charAt(0).toUpperCase()}
               </span>
               <span className="hidden sm:inline max-w-32 truncate">
@@ -63,13 +61,13 @@ export default function Header({
             <>
               <Link
                 href="/dang-nhap"
-                className="hidden sm:block rounded-lg px-4 py-2 font-semibold hover:bg-white/10"
+                className="hidden rounded-lg px-4 py-2 font-bold text-stone-700 hover:bg-stone-100 sm:block"
               >
                 Đăng nhập
               </Link>
               <Link
                 href="/dang-ky"
-                className="rounded-lg bg-white px-4 py-2 font-bold text-brand-700 hover:bg-brand-50"
+                className="rounded-lg bg-brand-700 px-4 py-2 font-bold text-white hover:bg-brand-800"
               >
                 Đăng ký
               </Link>

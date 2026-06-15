@@ -17,6 +17,7 @@
 /* Elderly-first: 18px base, 22px in large-text mode (scales every rem unit) */
 html {
   font-size: 112.5%;
+  scroll-padding-top: 5rem;
 }
 html.lt {
   font-size: 137.5%;
@@ -36,5 +37,11 @@ body {
   :focus-visible {
     outline: 3px solid var(--color-brand-500);
     outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }

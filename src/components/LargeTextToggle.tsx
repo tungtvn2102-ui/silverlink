@@ -19,7 +19,9 @@ export default function LargeTextToggle({ initial }: { initial: boolean }) {
       aria-pressed={on}
       title="Bật / tắt chữ lớn"
       className={`rounded-lg px-3 py-2 font-bold transition ${
-        on ? "bg-white text-brand-700" : "bg-white/10 text-white hover:bg-white/20"
+        on
+          ? "bg-brand-700 text-white"
+          : "bg-stone-100 text-stone-700 hover:bg-brand-50 hover:text-brand-800"
       }`}
     >
       <span aria-hidden>A</span>

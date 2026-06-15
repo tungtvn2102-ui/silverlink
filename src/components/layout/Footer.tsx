@@ -1,11 +1,12 @@
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
   return (
     <footer className="mt-12 border-t border-stone-200 bg-white pb-24 md:pb-0">
-      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3">
+      <div className="mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-[1.2fr_1fr_1fr]">
         <div>
-          <p className="text-xl font-extrabold text-brand-700">SilverLink</p>
+          <Logo className="h-auto w-48" />
           <p className="mt-2 text-stone-600">
             Kết nối — Chăm sóc — Trao cơ hội cho người cao tuổi Việt Nam.
           </p>
@@ -29,6 +30,11 @@ export default function Footer() {
             <li>
               <Link href="/cong-dong" className="hover:text-brand-700">
                 Cộng đồng
+              </Link>
+            </li>
+            <li>
+              <Link href="/tin-tuc" className="hover:text-brand-700">
+                Cẩm nang & tin tức
               </Link>
             </li>
             <li>

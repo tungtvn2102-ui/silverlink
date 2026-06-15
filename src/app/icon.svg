@@ -1,0 +1,17 @@
+<svg width="160" height="160" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="160" rx="32" fill="#f0f7f4"/>
+  <circle cx="60" cy="80" r="48" fill="#c8c8d8"/>
+  <circle cx="60" cy="80" r="29" fill="#f0f7f4"/>
+  <circle cx="100" cy="80" r="48" fill="#0f766e"/>
+  <circle cx="100" cy="80" r="29" fill="#f0f7f4"/>
+  <clipPath id="teal-ring">
+    <circle cx="100" cy="80" r="48"/>
+  </clipPath>
+  <circle cx="60" cy="80" r="48" fill="#b0b0c0" clip-path="url(#teal-ring)"/>
+  <circle cx="60" cy="80" r="29" fill="#f0f7f4" clip-path="url(#teal-ring)"/>
+  <circle cx="100" cy="80" r="29" fill="#f0f7f4"/>
+  <rect x="48" y="64" width="24" height="32" rx="8" fill="#0f766e"/>
+  <rect x="88" y="64" width="24" height="32" rx="8" fill="#c8c8d8"/>
+  <circle cx="60" cy="80" r="48" fill="none" stroke="#e0e0ee" stroke-width="2"/>
+  <circle cx="100" cy="80" r="48" fill="none" stroke="#0d5c56" stroke-width="2"/>
+</svg>

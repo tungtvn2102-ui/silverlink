@@ -18,6 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/duong-lao",
     "/viec-lam",
     "/cong-dong",
+    "/tin-tuc",
     "/gioi-thieu",
     "/dieu-khoan",
     "/bao-mat",

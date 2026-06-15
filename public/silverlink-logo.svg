@@ -1,0 +1,26 @@
+<svg width="430" height="150" viewBox="0 0 430 150" role="img" aria-labelledby="title desc" xmlns="http://www.w3.org/2000/svg">
+  <title id="title">SilverLink logo</title>
+  <desc id="desc">SilverLink logo with interlinked rings and Vietnamese tagline.</desc>
+  <g transform="translate(-210 -95)">
+    <circle cx="272" cy="170" r="68" fill="#c8c8d8"/>
+    <circle cx="272" cy="170" r="42" fill="#fff"/>
+    <circle cx="352" cy="170" r="68" fill="#0f766e"/>
+    <circle cx="352" cy="170" r="42" fill="#fff"/>
+    <clipPath id="cl">
+      <circle cx="352" cy="170" r="68"/>
+    </clipPath>
+    <circle cx="272" cy="170" r="68" fill="#b0b0c0" clip-path="url(#cl)"/>
+    <circle cx="272" cy="170" r="42" fill="#fff" clip-path="url(#cl)"/>
+    <circle cx="352" cy="170" r="42" fill="#fff"/>
+    <rect x="256" y="148" width="32" height="44" rx="8" fill="#0f766e"/>
+    <rect x="332" y="148" width="32" height="44" rx="8" fill="#c8c8d8"/>
+    <circle cx="272" cy="170" r="68" fill="none" stroke="#e0e0ee" stroke-width="1.5"/>
+    <circle cx="272" cy="170" r="42" fill="none" stroke="#e0e0ee" stroke-width="1"/>
+    <circle cx="352" cy="170" r="68" fill="none" stroke="#0d5c56" stroke-width="1.5"/>
+    <circle cx="352" cy="170" r="42" fill="none" stroke="#0d5c56" stroke-width="1"/>
+    <line x1="430" y1="115" x2="430" y2="250" stroke="#c0c0cc" stroke-width="1" opacity="0.5"/>
+    <text x="448" y="158" font-family="Georgia, serif" font-size="52" font-weight="700" letter-spacing="-1" fill="#1a1a2e">Silver</text>
+    <text x="448" y="210" font-family="Georgia, serif" font-size="52" font-weight="700" letter-spacing="-1" fill="#0f766e">Link</text>
+    <text x="388" y="238" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="2" fill="#64748b">KẾT NỐI · CHĂM SÓC · TRAO CƠ HỘI</text>
+  </g>
+</svg>
